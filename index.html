@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steves Calixte Fluit — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10181A;
+    --surface:#16211F;
+    --surface-2:#1D2C29;
+    --bone:#EDE7DA;
+    --bone-dim:#B9B2A4;
+    --gold:#C9A227;
+    --line:#33413D;
+    --idea:#7C8C8A;
+    --progress:#C9A227;
+    --shipped:#7FA98C;
+    --radius:2px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold);color:var(--ink);}
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  h1,h2,h3{font-family:'Newsreader', serif;font-weight:500;margin:0;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(16,24,26,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1080px;margin:0 auto;padding:18px 32px;
+    display:flex;justify-content:space-between;align-items:center;
+    position:relative;
+  }
+  .nav-mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;letter-spacing:0.08em;
+    color:var(--bone-dim);
+  }
+  .nav-mark span{color:var(--gold);}
+  nav.links{display:flex;gap:28px;font-size:14px;}
+  nav.links a{text-decoration:none;color:var(--bone-dim);transition:color .2s;}
+  nav.links a:hover{color:var(--bone);}
+
+  .nav-toggle{
+    display:none;
+    background:none;border:1px solid var(--line);border-radius:var(--radius);
+    width:38px;height:34px;padding:0;cursor:pointer;
+    flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  }
+  .nav-toggle span{width:16px;height:1px;background:var(--bone);display:block;transition:transform .2s, opacity .2s;}
+  .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+  @media (max-width:640px){
+    .nav-toggle{display:flex;}
+    nav.links{
+      position:absolute;top:100%;left:0;right:0;
+      flex-direction:column;gap:0;
+      background:var(--surface);
+      border-bottom:1px solid var(--line);
+      max-height:0;overflow:hidden;
+      transition:max-height .25s ease;
+    }
+    nav.links.open{max-height:260px;}
+    nav.links a{padding:16px 32px;border-top:1px solid var(--line);width:100%;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{padding:110px 0 90px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;}
+  .hero-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:22px;display:block;
+    opacity:0;animation:rise .7s ease forwards;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    font-style:italic;
+    line-height:1.02;
+    max-width:14ch;
+    color:var(--bone);
+    opacity:0;animation:rise .8s ease forwards;
+    animation-delay:.1s;
+  }
+  .hero h1 em{
+    color:var(--gold);font-style:italic;
+    position:relative;display:inline-block;
+  }
+  .hero h1 em::after{
+    content:"";position:absolute;left:0;bottom:.05em;width:100%;height:2px;
+    background:var(--gold);transform:scaleX(0);transform-origin:left;
+    animation:underline .6s ease forwards;animation-delay:1s;
+  }
+  .hero p.lede{
+    max-width:46ch;margin-top:26px;font-size:17px;color:var(--bone-dim);
+    opacity:0;animation:rise .8s ease forwards;animation-delay:.22s;
+  }
+  .hero-actions{
+    margin-top:38px;display:flex;gap:18px;flex-wrap:wrap;
+    opacity:0;animation:rise .8s ease forwards;animation-delay:.34s;
+  }
+
+  @keyframes rise{
+    from{opacity:0;transform:translateY(16px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes underline{to{transform:scaleX(1);}}
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;letter-spacing:.04em;
+    padding:12px 22px;border-radius:var(--radius);
+    text-decoration:none;display:inline-block;
+    border:1px solid var(--line);
+    transition:border-color .2s, background .2s;
+  }
+  .btn.primary{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:500;}
+  .btn.primary:hover{background:#e0b52d;}
+  .btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+  /* ambient ticker */
+  .ticker{
+    margin-top:80px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:14px 0;overflow:hidden;white-space:nowrap;
+  }
+  .ticker-track{display:inline-block;animation:scroll 28s linear infinite;font-family:'IBM Plex Mono', monospace;font-size:13px;color:var(--bone-dim);}
+  .ticker-track span{margin-right:38px;}
+  .ticker-track span::before{content:"◆";color:var(--gold);margin-right:12px;font-size:9px;}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion: reduce){
+    .ticker-track{animation:none;}
+    html{scroll-behavior:auto;}
+    .hero-eyebrow, .hero h1, .hero p.lede, .hero-actions{animation:none;opacity:1;}
+    .hero h1 em::after{animation:none;transform:scaleX(1);}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .work-card:hover{transform:none;}
+    .log-row:hover{padding-left:0;}
+    .status.progress::before{animation:none;}
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{padding:90px 0;border-bottom:1px solid var(--line);}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:12px;}
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.4rem);font-style:italic;}
+  .section-head .count{
+    font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--bone-dim);
+    border:1px solid var(--line);padding:4px 10px;border-radius:var(--radius);
+  }
+
+  /* ---------- WORK GRID ---------- */
+  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .work-card{
+    background:var(--surface);padding:32px;
+    transition:background .25s, transform .25s;
+    display:flex;flex-direction:column;gap:14px;min-height:220px;
+  }
+  .work-card:hover{background:var(--surface-2);transform:translateY(-4px);}
+  .work-card .tag{
+    font-family:'IBM Plex Mono', monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--gold);
+  }
+  .work-card h3{font-size:1.5rem;font-style:italic;color:var(--bone);}
+  .work-card p{font-size:14.5px;color:var(--bone-dim);margin:0;flex:1;}
+  .work-card .meta{
+    font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--bone-dim);
+    display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;
+  }
+  .work-card .meta a{text-decoration:none;color:var(--bone);}
+  .work-card .meta a:hover{color:var(--gold);}
+
+  @media (max-width:720px){.work-grid{grid-template-columns:1fr;}}
+
+  /* ---------- FUTURE LOG ---------- */
+  .log-note{color:var(--bone-dim);font-size:14.5px;max-width:58ch;margin:-30px 0 40px;}
+  .log{border-top:1px solid var(--line);}
+  .log-row{
+    display:grid;
+    grid-template-columns:110px 1fr 140px 90px;
+    gap:20px;align-items:center;
+    padding:22px 0;border-bottom:1px solid var(--line);
+    transition:padding-left .25s, border-color .25s;
+  }
+  .log-row:hover{padding-left:10px;border-color:var(--gold);}
+  .log-row.head{
+    font-family:'IBM Plex Mono', monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--bone-dim);padding-bottom:14px;
+  }
+  .log-date{font-family:'IBM Plex Mono', monospace;font-size:12.5px;color:var(--bone-dim);}
+  .log-title{font-size:16px;}
+  .log-title strong{font-weight:600;color:var(--bone);}
+  .log-title span{display:block;font-size:13px;color:var(--bone-dim);margin-top:3px;}
+  .status{
+    font-family:'IBM Plex Mono', monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    padding:5px 10px;border-radius:20px;text-align:center;width:fit-content;border:1px solid transparent;
+  }
+  .status.idea{color:var(--idea);border-color:var(--idea);}
+  .status.progress{color:var(--progress);border-color:var(--progress);position:relative;}
+  .status.progress::before{
+    content:"";position:absolute;left:6px;top:50%;width:5px;height:5px;border-radius:50%;
+    background:var(--progress);transform:translateY(-50%);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  .status.progress{padding-left:18px;}
+  .status.shipped{color:var(--shipped);border-color:var(--shipped);}
+
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:translateY(-50%) scale(1);}
+    50%{opacity:.4;transform:translateY(-50%) scale(1.4);}
+  }
+  .log-link{font-family:'IBM Plex Mono', monospace;font-size:12px;text-align:right;color:var(--bone-dim);}
+  .log-link a{text-decoration:none;}
+  .log-link a:hover{color:var(--gold);}
+
+  @media (max-width:720px){
+    .log-row{grid-template-columns:1fr;gap:6px;padding:20px 0;}
+    .log-row.head{display:none;}
+    .log-link{text-align:left;}
+  }
+
+  /* ---------- ABOUT / CONTACT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;}
+  .about-grid p{color:var(--bone-dim);font-size:15.5px;max-width:52ch;}
+  .stat-list{display:flex;flex-direction:column;gap:22px;}
+  .stat{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:14px;}
+  .stat .k{font-family:'IBM Plex Mono', monospace;font-size:12px;color:var(--bone-dim);text-transform:uppercase;letter-spacing:.06em;}
+  .stat .v{font-family:'IBM Plex Mono', monospace;font-size:14px;color:var(--gold);}
+  @media (max-width:720px){.about-grid{grid-template-columns:1fr;gap:32px;}}
+
+  /* ---------- RESPONSIVE TUNING ---------- */
+  @media (max-width:640px){
+    .wrap{padding:0 20px;}
+    .nav-inner{padding:16px 20px;}
+    .hero{padding:70px 0 56px;}
+    .hero p.lede{font-size:15.5px;}
+    .hero-actions{flex-direction:column;}
+    .hero-actions .btn{text-align:center;}
+    .ticker{margin-top:48px;}
+    section{padding:56px 0;}
+    .section-head{margin-bottom:32px;}
+    .work-card{padding:24px;min-height:0;}
+    .log-note{margin:-18px 0 28px;}
+    .about-grid{gap:28px;}
+    .foot-row{flex-direction:column;align-items:flex-start;}
+  }
+  @media (max-width:400px){
+    .hero h1{font-size:2.1rem;}
+    .ticker-track{font-size:12px;}
+  }
+
+  footer.site{padding:60px 0 50px;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .foot-row h2{font-size:2rem;font-style:italic;}
+  .foot-links{display:flex;gap:26px;font-size:14px;}
+  .foot-links a{text-decoration:none;color:var(--bone-dim);}
+  .foot-links a:hover{color:var(--gold);}
+  .copyright{margin-top:50px;font-family:'IBM Plex Mono', monospace;font-size:11.5px;color:var(--bone-dim);}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-inner">
+    <div class="nav-mark">J.A.<span>_</span>2026</div>
+    <nav class="links" id="navLinks">
+      <a href="#work">Work</a>
+      <a href="#log">Log</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="hero-eyebrow">Product designer &amp; developer</span>
+    <h1>I build things, <em>then</em> write down what's next.</h1>
+    <p class="lede">Portfolio and running log for Jordan Ashe — shipped work below, and an open ledger of what's being planned, prototyped, or picked up next.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#work">See the work</a>
+      <a class="btn ghost" href="#log">Read the log</a>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Interaction design</span><span>Front-end engineering</span><span>Design systems</span><span>Prototyping</span><span>Motion</span>
+      <span>Interaction design</span><span>Front-end engineering</span><span>Design systems</span><span>Prototyping</span><span>Motion</span>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Selected work</h2>
+      <span class="count">04 shipped</span>
+    </div>
+    <div class="work-grid">
+      <div class="work-card reveal">
+        <span class="tag">Case study</span>
+        <h3>Harbor — booking platform redesign</h3>
+        <p>Rebuilt the reservation flow end to end, cutting checkout steps from six to three and raising completion rate.</p>
+        <div class="meta"><span>2025 · Product design</span><a href="#">View →</a></div>
+      </div>
+      <div class="work-card reveal">
+        <span class="tag">Open source</span>
+        <h3>Fieldnote — markdown editor</h3>
+        <p>A distraction-free writing tool with versioned drafts, built for people who think in outlines first.</p>
+        <div class="meta"><span>2024 · Side project</span><a href="#">View →</a></div>
+      </div>
+      <div class="work-card reveal">
+        <span class="tag">Client work</span>
+        <h3>Loam — brand &amp; site</h3>
+        <p>Identity and site for a soil-health startup, from typography system through to the CMS handoff.</p>
+        <div class="meta"><span>2024 · Web design</span><a href="#">View →</a></div>
+      </div>
+      <div class="work-card reveal">
+        <span class="tag">Internal tool</span>
+        <h3>Ledger — ops dashboard</h3>
+        <p>Replaced three spreadsheets with one live dashboard for a 40-person operations team.</p>
+        <div class="meta"><span>2023 · Data viz</span><a href="#">View →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What's next</h2>
+      <span class="count">03 logged</span>
+    </div>
+    <p class="log-note reveal">Not everything here ships. This is the working list — ideas being scoped, things mid-build, and what just went live.</p>
+
+    <div class="log">
+      <div class="log-row head">
+        <div>Logged</div>
+        <div>Project</div>
+        <div>Status</div>
+        <div style="text-align:right;">Link</div>
+      </div>
+
+      <div class="log-row reveal">
+        <div class="log-date">Jul 2026</div>
+        <div class="log-title"><strong>Tideline</strong><span>A tide-and-weather widget for coastal runners — planning the data source now.</span></div>
+        <div class="status idea">Idea</div>
+        <div class="log-link"><a href="#">Notes</a></div>
+      </div>
+
+      <div class="log-row reveal">
+        <div class="log-date">Jun 2026</div>
+        <div class="log-title"><strong>Fieldnote 2.0</strong><span>Adding real-time collaboration to the markdown editor above.</span></div>
+        <div class="status progress">In progress</div>
+        <div class="log-link"><a href="#">Follow along</a></div>
+      </div>
+
+      <div class="log-row reveal">
+        <div class="log-date">Apr 2026</div>
+        <div class="log-title"><strong>Loam — phase two</strong><span>Expanded the brand system into packaging and a quarterly print mailer.</span></div>
+        <div class="status shipped">Shipped</div>
+        <div class="log-link"><a href="#">View</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>About</h2>
+    </div>
+    <div class="about-grid reveal">
+      <p>I'm a designer and developer working across product design, front-end engineering, and brand systems. I like projects that start messy — vague briefs, half-formed ideas — and end with something a team can actually run with.</p>
+      <div class="stat-list">
+        <div class="stat"><span class="k">Based in</span><span class="v">Rotterdam, NL</span></div>
+        <div class="stat"><span class="k">Currently</span><span class="v">Freelance</span></div>
+        <div class="stat"><span class="k">Stack</span><span class="v">Figma / React / Swift</span></div>
+        <div class="stat"><span class="k">Available</span><span class="v">Sep 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="foot-row reveal">
+      <h2>Let's talk.</h2>
+      <div class="foot-links">
+        <a href="mailto:hello@jordanashe.design">Email</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Jordan Ashe. Built by hand, logged in the open.</div>
+  </div>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('in-view'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+  }
+</script>
+</body>
+</html>
